@@ -9,7 +9,7 @@
 2. Uruchamiamy system:
    ```
    qemu-system-aarch64 -M virt -nographic \
-	-m 128 \
+	-m 256 \
 	-cpu cortex-a57 -smp 2 \
 	-kernel Image -append "root=fe00" \
 	-drive file=rootfs.ext4,if=none,format=raw,id=hd0 \
@@ -24,8 +24,8 @@
     #       list ports 'eth0'
 
     config interface 'lan'
-        option device 'br-lan'
-        option proto 'dhcp'
+            option device 'br-lan'
+            option proto 'dhcp'
     #       option ipaddr '192.168.1.1'
     #       option netmask '255.255.255.0'
     #       option ip6assign '60'
