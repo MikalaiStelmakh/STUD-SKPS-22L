@@ -32,10 +32,8 @@ def control_state(t_pwm, controller):
     for t, state in zip(t_pwm.keys(), t_pwm.values()):
         time_sleep = t - prev_t
         if state != prev_state:
-            controller.value = 1 if state is True else 0
+            controller.value = 1 if state else 0
             prev_state = state 
         time.sleep(time_sleep)
         prev_t = t
-
-
     
