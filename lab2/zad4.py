@@ -1,7 +1,7 @@
 import gpio4
 import time
 
-class GPIOwrap(gpio4.sysfsGPIO):
+class GPIOwrap(gpio4.SysfsGPIO):
 	def __init__(self, pin, direction):
 		super().__init__(pin)
 		self.export = True
@@ -11,10 +11,10 @@ class GPIOwrap(gpio4.sysfsGPIO):
 
 if __name__ == "__main__":
 	gpio27 = GPIOwrap(27, "out")
-	gpio18 = GPIOwrap(cw1827, "in")
+	gpio18 = GPIOwrap(18, "in")
 	while True:
-	if gpio18.value == 1:
-		gpio27.value = 1
-	else:	
-		gpio27.value = 0
-	time.sleep(1)
+		if gpio18.value == 1:
+			gpio27.value = 1
+		else:	
+			gpio27.value = 0
+		time.sleep(1)
