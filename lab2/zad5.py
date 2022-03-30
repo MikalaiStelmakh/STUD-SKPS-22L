@@ -1,8 +1,6 @@
 import gpio4
 import time
 import sys
-import math
-from pwm import generate_pwm, control_state
 
 class GPIOwrap(gpio4.SysfsGPIO):
     def __init__(self, pin, direction):
@@ -13,8 +11,13 @@ class GPIOwrap(gpio4.SysfsGPIO):
     def __del__(self):
         self.export = False
 
-pin = 23
+pin = 21
+freq = 50
 if __name__ == "__main__": 
-    pin23 = GPIOwrap(pin, "out")
-    t_pwm = generate_pwm([70], [abs(math.cos(n/10)) for n in range(100)],10)
-    control_state(t_pwm, pin23)
+	pin21 = GPIOwrap(pin, "out")
+	start = time.perf_counter()
+	while time.perf_counter() - start < 100:
+		time.sleep(1/freq * 0.075)
+		pin21.value = 0
+		time.sleep(1/freq * 0.925)
+		pin21.value = 1

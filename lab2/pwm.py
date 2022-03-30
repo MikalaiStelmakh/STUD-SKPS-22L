@@ -37,3 +37,5 @@ def control_state(t_pwm, controller):
         time.sleep(time_sleep)
         prev_t = t
     
+if __name__ == "__main__":
+    print(range(0, 1, 0.01))
