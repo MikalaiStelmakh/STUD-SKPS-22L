@@ -13,11 +13,12 @@ class GPIOwrap(gpio4.SysfsGPIO):
 
 pin = 21
 freq = 50
+wypelnienie = 0.08
 if __name__ == "__main__": 
 	pin21 = GPIOwrap(pin, "out")
 	start = time.perf_counter()
-	while time.perf_counter() - start < 100:
-		time.sleep(1/freq * 0.075)
+	while time.perf_counter() - start < 1:
+		time.sleep(1/freq * wypelnienie)
 		pin21.value = 0
-		time.sleep(1/freq * 0.925)
+		time.sleep(1/freq * (1-wypelnienie))
 		pin21.value = 1
