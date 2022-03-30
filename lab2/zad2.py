@@ -15,5 +15,5 @@ class GPIOwrap(gpio4.SysfsGPIO):
 pin = 23
 if __name__ == "__main__": 
     pin23 = GPIOwrap(pin, "out")
-    t_pwm = generate_pwm([2], [0.3, 0.5, 0.1, 0.5], 10)
+    t_pwm = generate_pwm([1], [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], 10)
     control_state(t_pwm, pin23)
