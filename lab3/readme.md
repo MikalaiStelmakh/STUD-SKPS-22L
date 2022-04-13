@@ -38,11 +38,11 @@ Mikalai Stelmakh
     make package/feeds/skps/demo1/compile
     ```
 10. `cd bin/packages/aarch64_cortex-a72/skps`
-11. 
-    ```
-    scp -P 8888 demo1_1.0-1_aarch64_cortex-a72.ipk "root@localhost:~"
-    ```
+11. Przeniesiono pliki na OpenWRT
 12. Instalujemy pakiety na OpenWRT:
     ```
     opkg install demo1_1.0-1_aarch64_cortex-a72.ipk
     ```
+
+directory /home/user/skps22_sztanga_stelmakh/lab3/zad2/buggy/src
+
