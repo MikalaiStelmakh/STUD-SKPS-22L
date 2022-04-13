@@ -5,7 +5,7 @@ Mikalai Stelmakh
 ## SKPS22L, Laboratorium 3
 
 ### SDK
-1. `wget https://downloads.openwrt.org/releases/21.02.1/targets/    bcm27xx/bcm2711/openwrt-sdk-21.02.1-bcm27xx-bcm2711_gcc-8.4.0_musl.Linux-x86_64.tar.xz`
+1. `wget https://downloads.openwrt.org/releases/21.02.1/targets/bcm27xx/bcm2711/openwrt-sdk-21.02.1-bcm27xx-bcm2711_gcc-8.4.0_musl.Linux-x86_64.tar.xz`
 2. `tar -xaf openwrt-sdk-21.02.1-bcm27xx-bcm2711_gcc-8.4.0_musl.Linux-x86_64.tar.xz`
 3. `make menuconfig`
     - W `Global Build Settings` wyłączamy
@@ -22,7 +22,7 @@ Mikalai Stelmakh
 5. `export LANG=C`
 6. `nano feeds.conf.default`
     ```
-    src-link skps <path>/demo1_owrt_pkg
+    src-link skps /home/user/skps22_sztanga_stelmakh/lab3/demo1_owrt_pkg
     ```
 7.
     ```
@@ -35,17 +35,14 @@ Mikalai Stelmakh
         - demo1mak
 9. 
     ```
-    make package/demo1/compile
-    make package/demo1mak/compile
+    make package/feeds/skps/demo1/compile
     ```
-10. `cd bin/.../skps`
+10. `cd bin/packages/aarch64_cortex-a72/skps`
 11. 
     ```
     scp -P 8888 demo1_1.0-1_aarch64_cortex-a72.ipk "root@localhost:~"
-    scp -P 8888 demo1mak_1_aarch64_cortex-a72.ipk "root@localhost:~"
     ```
 12. Instalujemy pakiety na OpenWRT:
     ```
     opkg install demo1_1.0-1_aarch64_cortex-a72.ipk
-    opkg install demo1mak_1_aarch64_cortex-a72.ipk
     ```
