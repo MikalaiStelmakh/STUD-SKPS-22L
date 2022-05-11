@@ -16,7 +16,6 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 #include "cw4a.h"
-#include <sys/timerfd.h>
 
 int main(int argc, char *argv[])
 {
@@ -28,7 +27,7 @@ int main(int argc, char *argv[])
     if (argc < 4) {
         fprintf(stderr, "Usage: %s number_of_clients number_of_samples sampling_period processing_delay\n", argv[0]);
         exit(EXIT_FAILURE);
-    }    
+    }
     //Number of clients
     int ncli=atoi(argv[1]);
     if(ncli > MAX_CLIENTS) {
@@ -82,23 +81,12 @@ int main(int argc, char *argv[])
             cpids[i] = pid;
         }
     }
-	timer = timerfd_create(CLOCK_MONOTONIC, 0);
-	struct itimerspec timerdata;
-	timerdata.it_interval.tv_sec = 0;
-	timerdata.it_interval.tv_nsec = 1000* udelsmp;
-	timerdata.it_value.tv_sec = 20;
-	timerdata.it_value.tv_nsec = 0;
-
-	timerfd_settime(timer, 0, &timerdata, NULL);
-
     //Now we can start generating data and delivering data
     unsigned long prev_smptime = 0;
     for(i=0; i<nsmp; i++) {
         int j;
         unsigned long smptime;
-        //usleep(udelsmp);
-	uint64_t exp = 0;
-	read(timer, &exp, sizeof(uint64_t);
+        usleep(udelsmp);
         //Prepare data to be inserted
         pthread_mutex_lock(&rbuf->cvar_lock);
         //check if there is place for the new data
@@ -127,7 +115,7 @@ int main(int argc, char *argv[])
         //Please note, that this is not a correct implementation!
         //Now we only detect possible error, but we should also check the number of written bytes
         //and repeat writing if only part of the line was written?
-        assert(write(fout,line,strlen(line))>0); 
+        assert(write(fout,line,strlen(line))>0);
         sync();
     }
     printf("waiting for children");
