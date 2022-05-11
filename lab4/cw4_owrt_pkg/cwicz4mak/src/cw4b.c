@@ -90,9 +90,7 @@ int main(int argc, char *argv[])
             for(j=0;j<ndel;j++)
                dummy++;
         } else {
-                if (active_wait)
-                    while (rbuf->head != rbuf->tail[ncli]);
-                else
+                if (!active_wait)
                     pthread_cond_wait(&rbuf->cvar, &rbuf->cvar_lock);
             pthread_mutex_unlock(&rbuf->cvar_lock);
         }
