@@ -46,19 +46,6 @@ int main(int argc, char *argv[])
     struct ringbuf * rbuf = (struct ringbuf *) mptr;
     //Check if the memory is initialized
     assert(rbuf->magick == 0x12345678);
-
-    // Check for active wait env variables
-    char active_wait = 0;
-    if (getenv("ACTIVE_WAIT_ALL")){
-        active_wait = 1;
-        printf("ACTIVE_WAIT_ALL = %d\n", active_wait);
-    }
-
-    if (ncli == 0 && getenv("ACTIVE_WAIT_CLI_0")) {
-        active_wait = 1;
-        printf("ACTIVE_WAIT_CLI_0 = %d\n", active_wait);
-    }
-
     //Now we can start receiving the data
     smpnum=0;
     while(smpnum<nsmp) {
@@ -90,10 +77,7 @@ int main(int argc, char *argv[])
             for(j=0;j<ndel;j++)
                dummy++;
         } else {
-                if (active_wait)
-                    while (rbuf->head != rbuf->tail[ncli]);
-                else
-                    pthread_cond_wait(&rbuf->cvar, &rbuf->cvar_lock);
+            pthread_cond_wait(&rbuf->cvar,&rbuf->cvar_lock);
             pthread_mutex_unlock(&rbuf->cvar_lock);
         }
     }
