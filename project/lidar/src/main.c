@@ -9,6 +9,7 @@
 #include <unistd.h>
 
 #include "vl53l0x_api.h"
+#include "vl53l0x_api.h"
 #include "vl53l0x_platform.h"
 
 
@@ -129,8 +130,11 @@ int main(void){
 
     while (1){
 
+        uint32_t angle;
         uint32_t measurement = measure(&sensor);
-        if (mq_send(measurement_queue, (char*)&measurement, sizeof(uint32_t), 0)) {
+        char data[256];
+        snprintf(data, sizeof(data), "%d,%d", angle, measurement);
+        if (mq_send(measurement_queue, data, sizeof(data), 0)) {
             fprintf(stderr, "Measurement sending failed..\n");
             return EXIT_FAILURE;
         }
