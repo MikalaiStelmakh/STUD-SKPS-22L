@@ -13,16 +13,19 @@
 #define PORT     8080
 #define MAXLINE 1024
 
+#define MQ_PATH "/measurements"
+
+mqd_t measurement_queue = 0;
+
 // Driver code
 int main() {
     int sockfd;
     char buffer[MAXLINE];
     struct sockaddr_in servaddr, cliaddr;
 
-
     // Creating socket file descriptor
     if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) {
-        perror("socket creation failed");
+        perror("Socket creation failed");
         exit(EXIT_FAILURE);
     }
 
@@ -42,12 +45,11 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
+    mq_unlink(MQ_PATH);
     // Open queue
-    mq_unlink("/measurements");
-
-    mqd_t measurement_queue = mq_open("/measurements", O_CREAT | O_RDONLY | O_EXCL, 0700, NULL);
+    measurement_queue = mq_open(MQ_PATH, O_CREAT | O_RDONLY | O_EXCL, 0700, NULL);
     if (measurement_queue < 0){
-        fprintf(stderr, "Queue open failed.\n");
+        fprintf(stderr, "Queue opening failed.\n");
         return EXIT_FAILURE;
     }
 

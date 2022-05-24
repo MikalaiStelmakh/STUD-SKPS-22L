@@ -11,6 +11,8 @@
 #include "vl53l0x_api.h"
 #include "vl53l0x_platform.h"
 
+#define PWM "/sys/class/pwm/pwmchip0"
+
 
 void abort_if_error(VL53L0X_Error Status){
     if (Status == VL53L0X_ERROR_NONE) return;
@@ -98,6 +100,7 @@ void sensor_stop(VL53L0X_Dev_t *sensor){
     Status = VL53L0X_ClearInterruptMask(sensor,
 		VL53L0X_REG_SYSTEM_INTERRUPT_GPIO_NEW_SAMPLE_READY);
     abort_if_error(Status);
+    VL53L0X_i2c_close();
 }
 
 VL53L0X_Error wait_measurement_data_ready(VL53L0X_Dev_t *sensor){
@@ -142,25 +145,80 @@ uint32_t measure(VL53L0X_Dev_t *sensor){
     return RangingMeasurementData.RangeMilliMeter;
 }
 
+// Servo
+
+void write_to_txt(char* const filename, char* const text) {
+    int fd = open(filename, O_WRONLY);
+    if (fd < 0) {
+        fprintf(stderr, "Opening servo failed.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    ssize_t status = write(fd, text, strlen(text));
+    if (status < 0) {
+        fprintf(stderr, "Closing servo failed.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    close(fd);
+}
+
+void pwm_open(void){
+    write_to_txt(PWM "/export", "0\n");
+}
+
+void pwm_close(void){
+    write_to_txt(PWM "/unexport", "0\n");
+}
+
+void servo_rotate(uint16_t angle){
+    // TODO: calculate duty_cycle
+    uint32_t duty_cycle;
+
+    char duty_cycle_str[32];
+    snprintf(duty_cycle_str, sizeof(duty_cycle_str), "%u\n", duty_cycle);
+
+    // Set the PWM signal
+    write_to_txt(PWM "/pwm0/period", "20000000\n");
+    write_to_txt(PWM "/pwm0/duty_cycle", duty_cycle_str);
+    write_to_txt(PWM "/pwm0/enable", "1\n");
+
+    // Wait for the servo to rotate
+    usleep(250000);
+    write_to_txt(PWM "/pwm0/enable", "0\n");
+
+}
+
+void clean(){
+    pwm_close();
+}
+
 int main(void){
     VL53L0X_Dev_t sensor;
 
+    if (atexit(clean)) {
+        printf("Atexit cleanup failed.\n");
+        return EXIT_FAILURE;
+    }
+
+
     mqd_t measurement_queue = mq_open("/measurements", O_WRONLY);
     if (measurement_queue < 0){
-        fprintf(stderr, "Queue open failed.\n");
+        fprintf(stderr, "Queue opening failed.\n");
         return EXIT_FAILURE;
     }
 
     sensor_init(&sensor);
-    uint32_t angle = 0;
+    uint16_t angle = 0;
 
     while (1){
-
+        // TODO: change angle every iteration
+        servo_rotate(angle);
         uint32_t measurement = measure(&sensor);
         char data[256];
-        snprintf(data, sizeof(data), "%d,%d", angle, measurement);
+        snprintf(data, sizeof(data), "%u,%u", angle, measurement);
         if (mq_send(measurement_queue, data, sizeof(data), 0)) {
-            fprintf(stderr, "Measurement sending failed..\n");
+            fprintf(stderr, "Measurement sending failed.\n");
             return EXIT_FAILURE;
         }
 

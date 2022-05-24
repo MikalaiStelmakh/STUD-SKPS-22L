@@ -1,5 +1,5 @@
 /*******************************************************************************
-Copyright © 2015, STMicroelectronics International N.V.
+Copyright ï¿½ 2015, STMicroelectronics International N.V.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef VL53L0X_TYPES_H_
 #define VL53L0X_TYPES_H_
+
 
 /** @defgroup porting_type  Basic type definition
  *  @ingroup  VL53L0X_platform_group
@@ -72,7 +73,7 @@ typedef unsigned long long uint64_t;
 /** @brief Typedef defining 32 bit unsigned int type.\n
  * The developer should modify this to suit the platform being deployed.
  */
-typedef unsigned int uint32_t;
+
 
 /** @brief Typedef defining 32 bit int type.\n
  * The developer should modify this to suit the platform being deployed.
