@@ -2,7 +2,7 @@ CC = $(CROSS_COMPILE)gcc
 AR = $(CROSS_COMPILE)ar
 RM = rm
 
-CFLAGS = -O0 -g -Wall -c
+CFLAGS = -O0 -g -Wall
 
 OUTPUT_DIR = bin
 OBJ_DIR = obj
@@ -41,7 +41,7 @@ $(TARGET_LIB): $(LIB_OBJS)
 
 $(OBJ_DIR)/%.o:%.c
 	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@
+	$(CC) $(CFLAGS) -c $(INCLUDES) $< -o $@
 
 $(EXAMPLES_BIN): bin/%:examples/%.c
 	mkdir -p $(dir $@)
