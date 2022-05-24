@@ -1,4 +1,4 @@
-CC = gcc
+CC = $(CROSS_COMPILE)gcc
 
 CFLAGS += -Wall -Wextra -Wpedantic
 
@@ -9,7 +9,7 @@ VL53L0X_rasp/bin/libVL53L0X_Rasp.a:
 
 
 main: main.c VL53L0X_rasp/bin/libVL53L0X_Rasp.a
-	$(CC) -I VL53L0X_rasp/platform/inc -I VL53L0X_API/Api/core/inc $(CFLAGS) -o main main.c -LVL53L0X_rasp/bin -lVL53L0X_Rasp -lrt
+	$(CC) -I VL53L0X_rasp/platform/inc -I VL53L0X_API/Api/core/inc $(CFLAGS) -o main main.c -L VL53L0X_rasp/bin -l VL53L0X_Rasp -lrt
 
 
 rpi_to_host: rpi_to_host.c

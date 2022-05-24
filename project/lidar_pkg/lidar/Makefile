@@ -18,6 +18,7 @@ define Package/$(PKG_NAME)
   SECTION:=project
   CATEGORY:=Examples
   TITLE:=Lidar
+  DEPENDS:=+libc +librt
 endef
 
 define Build/Configure

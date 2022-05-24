@@ -67,7 +67,7 @@ int main() {
                 MSG_WAITALL, ( struct sockaddr *) &cliaddr,
                 &len);
     buffer[n] = '\0';
-    printf("Client : %s\n", buffer);
+    printf("Connected.\n");
 
     while (1){
         int ready = poll(&poll_descriptor, 1, -1);
