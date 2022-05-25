@@ -1,6 +1,6 @@
 import socket
 
-ADDRESS = ''
+ADDRESS = '10.42.0.156'
 PORT = 8080
 
 

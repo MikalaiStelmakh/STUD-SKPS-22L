@@ -28,8 +28,12 @@ void sensor_init(VL53L0X_Dev_t *sensor){
     uint8_t isApertureSpads;
     uint8_t VhvSettings;
     uint8_t PhaseCal;
+    VL53L0X_DeviceInfo_t                DeviceInfo;
+
 
     sensor->I2cDevAddr      = 0x29;
+
+    sleep(0.5);
 
     //choose between i2c-0 and i2c-1; On the raspberry pi zero, i2c-1 are pins 2 and 3
     sensor->fd = VL53L0X_i2c_init("/dev/i2c-1", sensor->I2cDevAddr);
@@ -38,17 +42,26 @@ void sensor_init(VL53L0X_Dev_t *sensor){
         abort_if_error(Status);
     }
 
+    Status = VL53L0X_GetDeviceInfo(sensor, &DeviceInfo);
+    printf("VL53L0X_GetDeviceInfo:\n");
+    printf("Device Name : %s\n", DeviceInfo.Name);
+    printf("Device Type : %s\n", DeviceInfo.Type);
+    printf("Device ID : %s\n", DeviceInfo.ProductId);
+    printf("ProductRevisionMajor : %d\n", DeviceInfo.ProductRevisionMajor);
+    printf("ProductRevisionMinor : %d\n", DeviceInfo.ProductRevisionMinor);
+    abort_if_error(Status);
+
     printf ("Call of VL53L0X_StaticInit\n");
     Status = VL53L0X_StaticInit(sensor);
     abort_if_error(Status);
 
     printf ("Call of VL53L0X_PerformRefCalibration\n");
     Status = VL53L0X_PerformRefCalibration(sensor, &VhvSettings, &PhaseCal);
-    abort_if_error(Status);
+    // abort_if_error(Status);
 
     printf ("Call of VL53L0X_PerformRefSpadManagement\n");
     Status = VL53L0X_PerformRefSpadManagement(sensor, &refSpadCount, &isApertureSpads);
-    abort_if_error(Status);
+    // abort_if_error(Status);
 
     printf ("Call of VL53L0X_SetDeviceMode\n");
     Status = VL53L0X_SetDeviceMode(sensor, VL53L0X_DEVICEMODE_CONTINUOUS_RANGING);
@@ -56,7 +69,7 @@ void sensor_init(VL53L0X_Dev_t *sensor){
 
     printf ("Call of VL53L0X_StartMeasurement\n");
     Status = VL53L0X_StartMeasurement(sensor);
-    abort_if_error(Status);
+    // abort_if_error(Status);
 }
 
 VL53L0X_Error WaitStopCompleted(VL53L0X_Dev_t *sensor) {
@@ -91,15 +104,15 @@ void sensor_stop(VL53L0X_Dev_t *sensor){
 
     printf ("Call of VL53L0X_StopMeasurement\n");
     Status = VL53L0X_StopMeasurement(sensor);
-    abort_if_error(Status);
+    // abort_if_error(Status);
 
     printf ("Wait Stop to be competed\n");
     Status = WaitStopCompleted(sensor);
-    abort_if_error(Status);
+    // abort_if_error(Status);
 
     Status = VL53L0X_ClearInterruptMask(sensor,
 		VL53L0X_REG_SYSTEM_INTERRUPT_GPIO_NEW_SAMPLE_READY);
-    abort_if_error(Status);
+    // abort_if_error(Status);
     VL53L0X_i2c_close();
 }
 
@@ -134,10 +147,10 @@ uint32_t measure(VL53L0X_Dev_t *sensor){
     VL53L0X_RangingMeasurementData_t    RangingMeasurementData;
 
     Status = wait_measurement_data_ready(sensor);
-    abort_if_error(Status);
+    // abort_if_error(Status);
 
     Status = VL53L0X_GetRangingMeasurementData(sensor, &RangingMeasurementData);
-    abort_if_error(Status);
+    // abort_if_error(Status);
 
     VL53L0X_ClearInterruptMask(sensor, VL53L0X_REG_SYSTEM_INTERRUPT_GPIO_NEW_SAMPLE_READY);
     VL53L0X_PollingDelay(sensor);
@@ -200,7 +213,6 @@ int main(void){
         printf("Atexit cleanup failed.\n");
         return EXIT_FAILURE;
     }
-
 
     mqd_t measurement_queue = mq_open("/measurements", O_WRONLY | O_CREAT);
     if (measurement_queue < 0){
