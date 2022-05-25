@@ -213,7 +213,7 @@ int main(void){
 
     while (1){
         // TODO: change angle every iteration
-        servo_rotate(angle);
+        // servo_rotate(angle);
         uint32_t measurement = measure(&sensor);
         char data[256];
         snprintf(data, sizeof(data), "%u,%u", angle, measurement);
