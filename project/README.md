@@ -16,6 +16,7 @@ Pakiet zawiera dwa pliki:
 Rolę hosta pełni program `client.py`, który za pomocą protokołu UDP odbiera pomiary i wizualizuje ich w czasie rzeczywistym.
 
 ## Schemat
-![Drag Racing](schemat.png)
+![](images/schemat.png)
 ## Uruchomienie pakietu na qemu
 Zostały zbudowane pakiety dla rpi oraz dla armvirt. Ostatni został uruchomiony na qemu, ale z powodu braku sprzętu zakończył się błędem.
+![](images/package_install.png)
