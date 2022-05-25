@@ -18,3 +18,4 @@ Rolę hosta pełni program `client.py`, który za pomocą protokołu UDP odbiera
 ## Schemat
 ![Drag Racing](schemat.png)
 ## Uruchomienie pakietu na qemu
+Zostały zbudowane pakiety dla rpi oraz dla armvirt. Ostatni został uruchomiony na qemu, ale z powodu braku sprzętu zakończył się błędem.
