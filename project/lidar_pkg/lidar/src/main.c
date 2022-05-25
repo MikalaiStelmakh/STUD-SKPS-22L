@@ -202,7 +202,7 @@ int main(void){
     }
 
 
-    mqd_t measurement_queue = mq_open("/measurements", O_WRONLY);
+    mqd_t measurement_queue = mq_open("/measurements", O_WRONLY | O_CREAT);
     if (measurement_queue < 0){
         fprintf(stderr, "Queue opening failed.\n");
         return EXIT_FAILURE;

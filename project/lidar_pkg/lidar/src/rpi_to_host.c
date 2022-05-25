@@ -48,7 +48,7 @@ int main() {
 
     mq_unlink(MQ_PATH);
     // Open queue
-    measurement_queue = mq_open(O_RDONLY, 0700, NULL);
+    measurement_queue = mq_open(MQ_PATH, O_CREAT | O_RDONLY | O_EXCL, 0700, NULL);
     if (measurement_queue < 0){
         fprintf(stderr, "Queue opening failed.\n");
         return EXIT_FAILURE;
