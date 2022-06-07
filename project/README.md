@@ -5,15 +5,13 @@ Lidar na bazie czujnika odległości ToF i serwomechanizmu
 
 ## Opis działania
 
-Pakiet zawiera dwa pliki:
-- `main`
+Program przedstawia sobą nieskończoną pętlę:
 
-  Steruje serwomechanizmem, obracając go i wykonując pomiary odległości za pomocą urządzenia ToF. Każdy pomiar zostaje zapisany do kolejki komunikatów.
-- `rpi_to_host`
-
-  Ciągle odbiera pomiary z kolejki komunikatów i za pomocą protokołu UDP wysyła ich do komputera.
-
-Rolę hosta pełni program `client.py`, który za pomocą protokołu UDP odbiera pomiary i wizualizuje ich w czasie rzeczywistym.
+1. Mierzenie odległości.
+2. Wysyłanie wyników za pomocą kolejki komunikatów.
+3. Odczyt wyników za pomocą kolejki komunikatów.
+4. Wysyłanie wyników do komputera za pomocą protokołu UDP.
+5. Obrót serwomechanizmu o kilka stopni.
 
 ## Schemat
 ![](images/schemat.png)
