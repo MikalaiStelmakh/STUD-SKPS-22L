@@ -327,7 +327,7 @@ int main(void){
     }
 
     sensor_init();
-    uint16_t angle = 0;
+    pwm_open();
 
     socket_open();
     socket_setup();
@@ -335,7 +335,7 @@ int main(void){
     receive_udp(buffer);
     printf("Connected.\n");
 
-
+    uint16_t angle = 0;
 
     while (1){
         // TODO: change angle every iteration
