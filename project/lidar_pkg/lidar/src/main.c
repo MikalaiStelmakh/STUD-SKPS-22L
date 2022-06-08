@@ -26,7 +26,7 @@
 
 mqd_t measurement_queue_write = 0;
 mqd_t measurement_queue_read = 0;
-VL53L0X_Dev_t sensor = {0};
+VL53L0X_Dev_t sensor;
 
 int sockfd = 0;
 struct sockaddr_in servaddr, cliaddr;
