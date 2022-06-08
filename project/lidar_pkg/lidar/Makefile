@@ -36,7 +36,6 @@ endef
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/main $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/rpi_to_host $(1)/usr/bin
 endef
 
 # This command is always the last, it uses the definitions and variables we give above in order to get the job done
