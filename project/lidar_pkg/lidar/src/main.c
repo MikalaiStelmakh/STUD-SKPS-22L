@@ -21,6 +21,7 @@
 #define MQ_PATH "/measurements"
 
 #define PWM "/sys/class/pwm/pwmchip0"
+#define STEP 10
 
 
 mqd_t measurement_queue_write = 0;
@@ -202,8 +203,15 @@ void pwm_close(void){
 }
 
 void servo_rotate(uint16_t angle){
-    // TODO: calculate duty_cycle
-    uint32_t duty_cycle = 2000000;
+    /*
+    For period of 20 ms, duty cycles are following:
+        180° - 2 ms
+        90° - 1.5 ms
+        0° - 1 ms
+    So to calculate duty cycle for given angle we use formula:
+        duty_cycle = 1ms + angle * 1ms / 180°
+    */
+    uint32_t duty_cycle = 1000000 + angle * 1000000 / 180;
 
     char duty_cycle_str[32];
     snprintf(duty_cycle_str, sizeof(duty_cycle_str), "%u\n", duty_cycle);
@@ -335,21 +343,25 @@ int main(void){
     receive_udp(buffer);
     printf("Connected.\n");
 
-    uint16_t angle = 0;
+    uint16_t current_angle = 0;
+    uint16_t angle_to_move = STEP;
 
     while (1){
-        // TODO: change angle every iteration
 
-        angle++;
-        servo_rotate(angle);
+        servo_rotate(angle_to_move);
+        current_angle += angle_to_move;
         uint32_t measurement = measure(&sensor);
         char data[256];
-        snprintf(data, sizeof(data), "%u,%u", angle, measurement);
+        snprintf(data, sizeof(data), "%u,%u", current_angle, measurement);
         if (mq_send(measurement_queue_write, data, sizeof(data), 0)) {
             fprintf(stderr, "Measurement sending failed.\n");
             return EXIT_FAILURE;
         }
         send_measurement_update_udp();
+
+        if (current_angle >= 180 || current_angle <= 0){
+            angle_to_move = -angle_to_move;
+        }
     }
     return 0;
 }
