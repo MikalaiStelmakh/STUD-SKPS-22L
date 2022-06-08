@@ -21,7 +21,7 @@
 #define MQ_PATH "/measurements"
 
 #define PWM "/sys/class/pwm/pwmchip0"
-#define STEP 10
+#define STEP 5
 
 
 mqd_t measurement_queue_write = 0;
@@ -51,8 +51,6 @@ void sensor_init(){
 
     sensor.I2cDevAddr      = 0x29;
 
-    sleep(0.5);
-
     //choose between i2c-0 and i2c-1; On the raspberry pi zero, i2c-1 are pins 2 and 3
     sensor.fd = VL53L0X_i2c_init("/dev/i2c-1", sensor.I2cDevAddr);
     if (sensor.fd<0) {
@@ -67,6 +65,10 @@ void sensor_init(){
     printf("Device ID : %s\n", DeviceInfo.ProductId);
     printf("ProductRevisionMajor : %d\n", DeviceInfo.ProductRevisionMajor);
     printf("ProductRevisionMinor : %d\n", DeviceInfo.ProductRevisionMinor);
+    abort_if_error(Status);
+
+    printf ("Call of VL53L0X_DataInit\n");
+    Status = VL53L0X_DataInit(&sensor); // Data initialization
     abort_if_error(Status);
 
     printf ("Call of VL53L0X_StaticInit\n");
@@ -220,7 +222,7 @@ void servo_rotate(uint16_t angle){
     write_to_txt(PWM "/pwm0/duty_cycle", duty_cycle_str);
     write_to_txt(PWM "/pwm0/enable", "1\n");
 
-    usleep(500000);
+    usleep(300000);
     write_to_txt(PWM "/pwm0/enable", "0\n");
 
 }
@@ -271,7 +273,6 @@ void send_udp(char *buffer){
 }
 
 void send_measurement_update_udp(){
-    printf("Send\n");
     struct pollfd poll_descriptor = {
         .fd = measurement_queue_read,
         .events = POLLIN
@@ -346,7 +347,7 @@ int main(void){
 
     while (1){
 
-        servo_rotate(angle_to_move);
+        servo_rotate(current_angle);
         current_angle += angle_to_move;
         uint32_t measurement = measure(&sensor);
         char data[256];
