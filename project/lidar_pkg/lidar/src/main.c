@@ -216,13 +216,11 @@ void servo_rotate(uint16_t angle){
     char duty_cycle_str[32];
     snprintf(duty_cycle_str, sizeof(duty_cycle_str), "%u\n", duty_cycle);
 
-    // Set the PWM signal
     write_to_txt(PWM "/pwm0/period", "20000000\n");
     write_to_txt(PWM "/pwm0/duty_cycle", duty_cycle_str);
     write_to_txt(PWM "/pwm0/enable", "1\n");
 
-    // Wait for the servo to rotate
-    usleep(250000);
+    usleep(500000);
     write_to_txt(PWM "/pwm0/enable", "0\n");
 
 }
