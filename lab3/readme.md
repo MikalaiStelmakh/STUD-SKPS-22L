@@ -67,7 +67,7 @@ Po uruchomieniu gra `worms` (a właściwie snake) działała poprawnie. Programy
 - Wykonano zaledwie jeden krok i program zgłosił błąd.
 - Po wyświetlaniu wartości pętli widać, że stało się to przy pierwszym wykonaniu.
 
-![](../Images/bug1.png)
+![](images/bug1.png)
 
 Wnioskujemy, że tablica do której są wpisywane wartości nie została zainicjowana.
 
@@ -80,10 +80,10 @@ Wnioskujemy, że tablica do której są wpisywane wartości nie została zainicj
 Naszą teorią było, że pętla wykracza poza zakres tablicy i w 1008 iteracji trafia na pamięć do której nie ma dostępu.
 
 Sprawdzono to więc testując kilka różnych pozycji w tablicy.
-![](../Images/bug2_1.png)
+![](images/bug2_1.png)
 
 Wykonano również `backtrace`.
-![](../Images/bug2_2.png)
+![](images/bug2_2.png)
 
 ### Bug3
 - Użyto polecenia `directory` by wskazać debugerowi pliki źródłowe.
@@ -94,6 +94,6 @@ modyfikowana, a jednak jej wartość nie równała się początkowej.
 - Kiedy debuger wykrył zmianę wartości `s2[0]` zatrzymał wykonywanie.
 - Sprawdziliśmy numer iteracji. Iterator pętli wynosił **11**.
 
-![](../Images/bug3.png)
+![](images/bug3.png)
 
 Doszliśmy do wniosku, że to od tego momentu s2 zaczyna być niezamierzenie modyfikowane.
